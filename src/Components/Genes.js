@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
-import GeneItem from './GeneItem';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import $ from 'jquery';
+import GeneItem from './GeneItem';
 
 class Genes extends Component {
 
   constructor(){
     super();
-    this.state = { selectValue: "" };
+    this.state = { selectValue: "", gene_data:"" };
   }
 
-  switchGene (e) {
-		var newGene = e.target.value;
-		this.setState({
-			gene: newGene,
-			selectValue: null
-		});
-	}
-
 	updateValue (newValue) {
-		this.setState({
-			selectValue: newValue
-		});
+    if (newValue.value != null) {
+      $.ajax({
+        url: 'http://cslinux.utm.utoronto.ca:10675/api/genes/' + newValue.value,
+        dataType:'json',
+        cache: true,
+        success: function(data){
+          this.setState({selectValue: newValue, gene_data: data});
+        }.bind(this),
+        error: function(xhr, status, err){
+          console.log(err);
+        }
+      });
+    }
 	}
 
   render() {
@@ -42,13 +45,15 @@ class Genes extends Component {
           onChange={this.updateValue.bind(this)}
           value={this.state.selectValue}
         />
+        <hr />
+        <GeneItem geneData={this.state.gene_data}/>
       </div>
     );
   }
 }
-
+/*
 Genes.propTypes = {
   genes: React.PropTypes.array
 }
-
+*/
 export default Genes;

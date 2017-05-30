@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import uuid from 'uuid';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import $ from 'jquery';
 import Genes from './Components/Genes';
@@ -18,7 +16,7 @@ class App extends Component {
     $.ajax({
       url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
       dataType:'json',
-      cache: false,
+      cache: true,
       success: function(data){
         this.setState({genes: data}, function(){
           console.log(this.state);
@@ -30,12 +28,6 @@ class App extends Component {
     });
   }
 
-  searchGene(){
-    event.preventDefault();
-    let gene = {name: this.refs.gene_name.value }
-  }
-
-
   componentWillMount(){
     this.getGenes();
   }
@@ -46,10 +38,8 @@ class App extends Component {
 
   render() {
     return (
-
       <div className="App">
         <Genes genes={this.state.genes} />
-        <hr />
       </div>
     );
   }
