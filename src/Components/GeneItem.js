@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import {ReactSelectize, SimpleSelect, MultiSelect} from 'react-selectize';
 
 class GeneItem extends Component {
   render() {
     return (
-      <li className="Gene">
-        <strong>{this.props.gene.title}</strong>
-      </li>
+      <option value = {this.props.gene.gene}>
+        {this.props.gene.gene}
+      </option>
     );
   }
 }
