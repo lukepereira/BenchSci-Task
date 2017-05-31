@@ -14,7 +14,7 @@ const PORT =  10675;
 let pool = new pg.Pool({
     database: 'perei345_309',
     user: 'perei345',
-    password: '36864',
+    password: '',
     host: 'mcsdb.utm.utoronto.ca',
     port: 5432,
     ssl: false,
@@ -23,43 +23,18 @@ let pool = new pg.Pool({
     idleTimeoutMillis: 1000 //close idle clients after 1 second
 });
 
-// var index = require('./routes/index');
-// var users = require('./routes/users');
-
-// Security Application
-// References: http://scottksmith.com/blog/2014/09/21/protect-your-node-apps-noggin-with-helmet/
+// Security 
 var helmet = require('helmet');
-
 var app = express();
-
 app.use(compression());
-
 app.use(helmet());
-// HTTP access control (CORS)
-// The Cross-Origin Resource Sharing (CORS) mechanism gives web servers cross-domain access controls,
-//  which enable secure cross-domain data transfers. Modern browsers use CORS in an API container
-// - such as XMLHttpRequest or Fetch - to mitigate risks of cross-origin HTTP requests
 app.use(cors())
 
-// error handler
-/*
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-}); */
-
-// error handling middleware should be loaded after the loading the routes
 if (app.get('env') === 'development') {
   app.use(errorHandler());
   console.log('errorHandle loaded!');
 }
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'))  // combined
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -71,14 +46,15 @@ app.use( (req, res, next ) => {
   next();
 });
 
-// GET all genes
+// GET /genes => retrieves all gene types in database
 app.get('/api/genes', function(request, response){
     pool.connect(function(err,db,done){
         if(err){
             console.error(err);
             response.status(500).send({ 'error' : err});
         } else{
-            db.query('SELECT distinct gene FROM benchsci.genes ORDER BY gene ASC', function(err, table){
+            db.query('SELECT distinct gene FROM benchsci.genes ORDER BY gene ASC', 
+		function(err, table){
                 done();
                 if(err){
                     return response.status(400).send({error:err})
@@ -91,7 +67,7 @@ app.get('/api/genes', function(request, response){
     })
 });
 
-// GET gene by name
+// GET /genes/:name => retrieves gene data by name
 app.get('/api/genes/:name', function(request, response){
     var name = request.params.name;
 
@@ -100,7 +76,8 @@ app.get('/api/genes/:name', function(request, response){
             console.error(err);
             response.status(500).send({ 'error' : err});
         } else{
-            db.query('SELECT * FROM benchsci.genes WHERE gene = $1', [String(name)], function(err, table){
+            db.query('SELECT * FROM benchsci.genes WHERE gene = $1', [String(name)], 
+		function(err, table){
                 done();
                 if(err){
                     return response.status(400).send({error:err})
@@ -113,25 +90,24 @@ app.get('/api/genes/:name', function(request, response){
     })
 });
 
+// POST /users/add => creates new user
+app.post('/api/users/add', function( request, response) {
+    var user_name = request.body.name;
+    var password = request.body.password;
+    var email = request.body.email;
 
-app.post('/api/new-country', function( request, response) {
-    var country_name = request.body.country_name;
-    var continent_name = request.body.continent_name;
-    var id = request.body.id;;
-
-    let country_values = [country_name, continent_name, id];
+    let user_values = [user_name, password, email];
 
     pool.connect((err, db, done) => {
 
-    // Call `done(err)` to release the client back to the pool (or destroy it if there is an error)
     done();
     if(err){
         console.error('error open connection', err);
         return response.status(400).send({error: err});
     }
     else {
-        db.query('INSERT INTO COUNTRY( country_name, continent_name, id ) VALUES ($1,$2,$3)',
-            [...country_values], (err, table) => {
+        db.query('INSERT INTO benchsci.users ( user_name, password, email ) VALUES ($1,$2,$3)',
+            [...user_values], (err, table) => {
             if(err) {
                 console.error('error running query', err);
                 return response.status(400).send({error: err});
@@ -143,20 +119,97 @@ app.post('/api/new-country', function( request, response) {
         })
     }
     });
-
     console.log(request.body);
 });
 
+// POST /users/login => authenticate user
+app.post('/api/users/login', function(request, response){
+    var user_name = request.body.name;
+    var password = request.body.password;
+    let user_values = [user_name, password];
 
-app.delete('/api/remove/:id', function( request, response){
-    var id = request.params.id;
+    pool.connect(function(err,db,done){
+        if(err){
+            console.error(err);
+            response.status(500).send({ 'error' : err});
+        } else{
+            db.query('SELECT * FROM benchsci.users WHERE user_name = $1 and password = $2', 
+		[...user_values], function(err, table){
+                done();
+                if(err){
+                    return response.status(400).send({error:err})
+                } else
+                {
+                    return response.status(200).send(table.rows)
+                }
+            })
+        }
+    })
+});
 
+// GET ../{username}/publications => retrieves publications saved by user
+app.get('/api/users/:name/publications', function(request, response){
+    var user_name = request.params.name;
+
+    pool.connect(function(err,db,done){
+        if(err){
+            console.error(err);
+            response.status(500).send({ 'error' : err});
+        } else{
+            db.query('SELECT * FROM benchsci.userpubs WHERE user_name = $1', 
+		[String(user_name)], function(err, table){
+                done();
+                if(err){
+                    return response.status(400).send({error:err})
+                } else
+                {
+                    return response.status(200).send(table.rows)
+                }
+            })
+        }
+    })
+});
+
+// POST .../{username}/publications => save publication for authenticated user
+app.post('/api/users/:name/publications', function(request, response){
+    var user_name = request.body.name;
+    var password = request.body.password;
+    var pub_id = request.body.pubID;
+    let user_values = [user_name, password, pub_id];
+
+    pool.connect(function(err,db,done){
+        if(err){
+            console.error(err);
+            response.status(500).send({ 'error' : err});
+        } else{
+            db.query('INSERT INTO benchsci.userpubs(pub_id) values pub_id=$3 WHERE user_name = $1 and password = $2', 
+		[...user_values], function(err, table){
+                done();
+                if(err){
+                    return response.status(400).send({error:err})
+                } else
+                {
+                    return response.status(200).send(table.rows)
+                }
+            })
+        }
+    })
+});
+
+// DELETE /{username}/publications => remove publication for authenticated user
+app.delete('/api/users/:name/publications', function(request, response){
+    var user_name = request.body.name;
+    var password = request.body.password;
+    var pub_id = request.body.pubID;
+    let user_values = [user_name, password, pub_id];
+	
     pool.connect(function(err,db,done){
         if(err){
             return response.status(400).send(err)
         } else{
-            db.query('DELETE FROM COUNTRY WHERE ID = $1', [Number(id)], function(err, result){
-                done();
+            db.query('DELETE FROM benchsci.userpubs WHERE user_name = $1 and password=$2 and pub_id=$3', 
+		[...user_values], function(err, result){
+                done(); 
                 if(err){
                     return response.status(400).send(err)
                 } else
