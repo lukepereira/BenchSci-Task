@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import uuid from 'uuid';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import $ from 'jquery';
-
-import Projects from './Components/Projects';
-import AddProject from './Components/AddProject';
 import Genes from './Components/Genes';
 import './App.css';
 
@@ -13,16 +8,15 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      projects: [],
       genes:[]
     }
   }
 
   getGenes(){
     $.ajax({
-      url: 'https://localhost:1065/api/genes',
+      url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
       dataType:'json',
-      cache: false,
+      cache: true,
       success: function(data){
         this.setState({genes: data}, function(){
           console.log(this.state);
@@ -34,14 +28,7 @@ class App extends Component {
     });
   }
 
-  searchGene(){
-    event.preventDefault();
-    let gene = {name: this.refs.gene_name.value }
-  }
-
-
   componentWillMount(){
-    this.getProjects();
     this.getGenes();
   }
 
@@ -52,8 +39,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <SearchGene searchGene={this.handleSearchGene.bind(this)} />
-        <hr />
         <Genes genes={this.state.genes} />
       </div>
     );
