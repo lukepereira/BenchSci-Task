@@ -59,7 +59,7 @@ if (app.get('env') === 'development') {
 }
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'))  // combined
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -78,7 +78,29 @@ app.get('/api/genes', function(request, response){
             console.error(err);
             response.status(500).send({ 'error' : err});
         } else{
-            db.query('SELECT gene FROM genes', function(err, table){
+            db.query('SELECT distinct gene FROM benchsci.genes ORDER BY gene ASC', function(err, table){
+                done();
+                if(err){
+                    return response.status(400).send({error:err})
+                } else
+                {
+                    return response.status(200).send(table.rows)
+                }
+            })
+        }
+    })
+});
+
+// GET gene by name
+app.get('/api/genes/:name', function(request, response){
+    var name = request.params.name;
+
+    pool.connect(function(err,db,done){
+        if(err){
+            console.error(err);
+            response.status(500).send({ 'error' : err});
+        } else{
+            db.query('SELECT * FROM benchsci.genes WHERE gene = $1', [String(name)], function(err, table){
                 done();
                 if(err){
                     return response.status(400).send({error:err})
@@ -92,13 +114,9 @@ app.get('/api/genes', function(request, response){
 });
 
 
-
 app.post('/api/new-country', function( request, response) {
     var country_name = request.body.country_name;
     var continent_name = request.body.continent_name;
-    // Acho mais eficiente com houver vários usuários WEB
-    // var id = Math.random().toFixed(3);
-
     var id = request.body.id;;
 
     let country_values = [country_name, continent_name, id];
@@ -152,6 +170,6 @@ app.delete('/api/remove/:id', function( request, response){
 });
 
 
-app.listen( PORT, () => console.log('Listening on port' + PORT) );
+app.listen( PORT, () => console.log('Listening on port ' + PORT) );
 
 module.exports = app;
