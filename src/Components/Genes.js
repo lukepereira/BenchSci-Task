@@ -26,7 +26,7 @@ class Genes extends Component {
     if (newValue && newValue.value != null) {
       $.ajax({
         method: "GET",
-        url: 'http://cslinux.utm.utoronto.ca:10675/api/genes/' + newValue.value,
+        url: 'http://localhost:10675/api/genes/' + newValue.value,
         dataType:'json',
         cache: true,
         success: function(data){
@@ -41,7 +41,7 @@ class Genes extends Component {
   getGenes(){
     $.ajax({
       method: "GET",
-      url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
+      url: 'http://localhost:10675/api/genes',
       dataType:'json',
       cache: true,
       success: function(data){

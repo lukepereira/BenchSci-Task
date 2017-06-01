@@ -178,7 +178,7 @@ app.post('/api/users/:name/publications', function(request, response){
         if(err){
             console.error(err);
             response.status(500).send({ 'error' : err});
-        } else{
+        } else {
           // Check if user already exists
           db.query('SELECT * FROM benchsci.users WHERE username = $1 and password=$2',
             [username, password], function(err, table){
@@ -195,9 +195,11 @@ app.post('/api/users/:name/publications', function(request, response){
                     } else {
                         return response.status(200).send(table.rows)
                     }
-                })
-            }
-      })
+                });
+              }
+            });
+        }
+    });
 });
 
 // DELETE /{username}/publications => remove publication for authenticated user

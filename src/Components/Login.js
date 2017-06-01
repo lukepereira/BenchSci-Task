@@ -7,7 +7,7 @@ class Login extends Component {
     event.preventDefault();
     $.ajax({
       method: "POST",
-      url: 'http://cslinux.utm.utoronto.ca:10675/login',
+      url: 'http://localhost:10675/login',
       data: $("#loginForm").serialize(),
       dataType:'json',
       success: function(data){
@@ -30,7 +30,7 @@ class Login extends Component {
   handleCreate () {
     $.ajax({
       method: "POST",
-      url: 'http://cslinux.utm.utoronto.ca:10675/create',
+      url: 'http://localhost:10675/create',
       data: $("#createForm").serialize(),
       dataType:'json',
       success: function(data){

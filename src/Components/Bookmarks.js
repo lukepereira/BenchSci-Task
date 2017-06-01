@@ -16,7 +16,7 @@ class Bookmarks extends Component {
   getBookmarks() {
     $.ajax({
       method: "GET",
-      url: 'http://cslinux.utm.utoronto.ca:10675/api/users/' +
+      url: 'http://localhost:10675/api/users/' +
           this.props.state.username + "/publications",
       dataType:'json',
       success: function(data){
@@ -34,7 +34,7 @@ class Bookmarks extends Component {
   handleSave(pub_id){
     $.ajax({
       method: "POST",
-      url: 'http://cslinux.utm.utoronto.ca:10675/api/users/' +
+      url: 'http://localhost:10675/api/users/' +
           this.props.state.username + "/publications",
       data: {'pub_id': pub_id, 'username': this.props.state.username,
           'password': this.props.state.password},
