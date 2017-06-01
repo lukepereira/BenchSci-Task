@@ -19,3 +19,16 @@ CREATE TABLE genes
 
 \copy genes(title,author,publisher,pub_date,figure_number,technique_group,gene) FROM 'test_data.csv' DELIMITER ',' CSV HEADER;
 
+DROP TABLE IF EXISTS users;
+CREATE TABLE users
+(
+  username text PRIMARY KEY NOT NULL,
+  password text NOT NULL
+);
+
+DROP TABLE IF EXISTS userpubs;
+CREATE TABLE userpubs
+(
+  pub_id int REFERENCES genes(id),
+  username text REFERENCES users(username)
+);

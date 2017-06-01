@@ -1,17 +1,18 @@
 ## Bench Sci Task
- 
-Single page web application using ReactJS and react-router and d3.js
- 
-The application does the following task:
- 
-Allow list and search of publications by gene
-Shows the visual plot of data distributions based on current search
-  The visual plot can be any type you choose
-  Distribution must include:
-    Technique
-    You can also add any other ones you want
-View the detail of each document, that shows its figures and their associated techniques
-User can have a list of favorite publications
- 
- 
 
+Single page web application using React, Node and PSQL. <br />
+
+Includes search of publications by gene. <br />
+
+d3.js graph of data distributions based on gene and technique group. <br />
+
+Users can store a list of favorite publications <br />
+
+## DEMO
+
+cslinux.utm.utoronto.ca:{port coming soon}
+
+## scripts:
+
+npm start <br />
+npm run build <br />

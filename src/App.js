@@ -1,46 +1,33 @@
 import React, { Component } from 'react';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import $ from 'jquery';
-import Genes from './Components/Genes';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import './App.css';
+import Genes from './Components/Genes';
+import NavBar from './Components/NavBar';
+import Account from './Components/Account';
 
 class App extends Component {
-  constructor(){
-    super();
-    this.state = {
-      genes:[]
-    }
+
+  renderGenes = () => {
+      return <Genes />;
   }
 
-  getGenes(){
-    $.ajax({
-      url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
-      dataType:'json',
-      cache: true,
-      success: function(data){
-        this.setState({genes: data}, function(){
-          console.log(this.state);
-        });
-      }.bind(this),
-      error: function(xhr, status, err){
-        console.log(err);
-      }
-    });
-  }
-
-  componentWillMount(){
-    this.getGenes();
-  }
-
-  componentDidMount(){
-    this.getGenes();
+  renderAccount = () => {
+      return <Account state={this.state}/>;
   }
 
   render() {
     return (
-      <div className="App">
-        <Genes genes={this.state.genes} />
-      </div>
+      <Router>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <NavBar />
+          <div style={{padding: 20}} >
+            <Route exact path="/" render={this.renderGenes}/>
+            <Route path="/library" render={this.renderGenes}/>
+            <Route path="/account" render={this.renderAccount}/>
+          </div>
+        </div>
+      </Router>
     );
   }
 }

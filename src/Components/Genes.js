@@ -8,17 +8,29 @@ class Genes extends Component {
 
   constructor(){
     super();
-    this.state = { selectValue: "", gene_data:"" };
+    this.state = {
+      selectValue: "",
+      allGenes: "",
+      geneData:"",
+      home:"true"
+    };
+    //this.handleSave = this.handleSave().bind(this);
+  }
+
+  componentWillMount(){
+    this.getGenes();
   }
 
 	updateValue (newValue) {
-    if (newValue.value != null) {
+    this.state.home="false";
+    if (newValue && newValue.value != null) {
       $.ajax({
+        method: "GET",
         url: 'http://cslinux.utm.utoronto.ca:10675/api/genes/' + newValue.value,
         dataType:'json',
         cache: true,
         success: function(data){
-          this.setState({selectValue: newValue, gene_data: data});
+          this.setState({selectValue: newValue, geneData: data})
         }.bind(this),
         error: function(xhr, status, err){
           console.log(err);
@@ -26,18 +38,36 @@ class Genes extends Component {
       });
     }
 	}
+  getGenes(){
+    $.ajax({
+      method: "GET",
+      url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
+      dataType:'json',
+      cache: true,
+      success: function(data){
+        this.setState({allGenes: data});
+        if (this.state.home == "true"){
+          this.setState({geneData:this.state.allGenes});
+        }
+      }.bind(this),
+      error: function(xhr, status, err){
+        console.log(err);
+      }
+    });
+  }
 
   render() {
     let geneItems;
-    if(this.props.genes){
-      geneItems = this.props.genes.map(
+    if(this.state.allGenes != ""){
+      geneItems = this.state.allGenes.map(
         gene => ({value: gene.gene, label: gene.gene})
           //<GeneItem key={gene.gene} gene={gene} />
       );
     }
+
     return (
       <div className="Genes">
-        <h3>Gene List</h3>
+        <h2>Gene Library</h2>
         <Select
           ref="geneSelect"
           name="form-field-name"
@@ -46,14 +76,12 @@ class Genes extends Component {
           value={this.state.selectValue}
         />
         <hr />
-        <GeneItem geneData={this.state.gene_data}/>
+        <svg id="svg-canvas" width="550" height="550">></svg>
+        <hr />
+        <GeneItem geneData={this.state.geneData} home={this.state.home}/>
       </div>
     );
   }
 }
-/*
-Genes.propTypes = {
-  genes: React.PropTypes.array
-}
-*/
+
 export default Genes;
