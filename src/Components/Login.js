@@ -7,7 +7,7 @@ class Login extends Component {
     event.preventDefault();
     $.ajax({
       method: "POST",
-      url: 'http://localhost:10675/login',
+      url: 'http://cslinux.utm.utoronto.ca:10675/login',
       data: $("#loginForm").serialize(),
       dataType:'json',
       success: function(data){
@@ -30,7 +30,7 @@ class Login extends Component {
   handleCreate () {
     $.ajax({
       method: "POST",
-      url: 'http://localhost:10675/create',
+      url: 'http://cslinux.utm.utoronto.ca:10675/create',
       data: $("#createForm").serialize(),
       dataType:'json',
       success: function(data){
@@ -54,21 +54,22 @@ class Login extends Component {
       // TODO: Make forms into classes
       <div style={{ marginTop:250, marginLeft:550/2 -200}}>
       <hr />
-
         <b>Login</b><br/><br/>
         <form id="loginForm" onSubmit={this.handleLogin.bind(this)}>
           <table>
-            <tr>
-              <td>username:</td>
-              <td><input type="text" name="username" size="50"
-              autoCorrect="off" spellCheck="false" autoCapitalize="off"
-              autoFocus="true" id="loginUser" /></td>
-            </tr>
-            <tr>
-              <td>password:</td>
-              <td><input type="password" id="loginPassword"name="password"
-              size="50" /></td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>username:</td>
+                <td><input type="text" name="username" size="50"
+                autoCorrect="off" spellCheck="false" autoCapitalize="off"
+                autoFocus="true" id="loginUser" /></td>
+              </tr>
+              <tr>
+                <td>password:</td>
+                <td><input type="password" id="loginPassword"name="password"
+                size="50" /></td>
+              </tr>
+            </tbody>
           </table><br/>
           <input type="button" onClick={this.handleLogin.bind(this)} value="login" />
         </form><br/><hr /><br/>
@@ -76,16 +77,18 @@ class Login extends Component {
         <b>Create Account</b><br/><br/>
         <form id="createForm"  onSubmit={this.handleCreate.bind(this)}>
           <table>
-            <tr>
-              <td>username:</td>
-              <td><input type="text" name="username" size="50" autoCorrect="off"
-                spellCheck="false" autoCapitalize="off" id="createUser"/></td>
-            </tr>
-            <tr>
-              <td>password:</td>
-              <td><input type="password" id="createPassword" name="password"
-              size="50" /></td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>username:</td>
+                <td><input type="text" name="username" size="50" autoCorrect="off"
+                  spellCheck="false" autoCapitalize="off" id="createUser"/></td>
+              </tr>
+              <tr>
+                <td>password:</td>
+                <td><input type="password" id="createPassword" name="password"
+                size="50" /></td>
+              </tr>
+            </tbody>
           </table><br/>
           <input type="button" onClick={this.handleCreate.bind(this)}
             value="create account" />

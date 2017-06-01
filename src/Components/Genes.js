@@ -22,13 +22,13 @@ class Genes extends Component {
   }
 
 	updateValue (newValue) {
-    this.state.home="false";
+    this.setState({home:"false"});
     if (newValue && newValue.value != null) {
       $.ajax({
         method: "GET",
-        url: 'http://localhost:10675/api/genes/' + newValue.value,
+        url: 'http://cslinux.utm.utoronto.ca:10675/api/genes/' + newValue.value,
         dataType:'json',
-        cache: true,
+        //cache: true,
         success: function(data){
           this.setState({selectValue: newValue, geneData: data})
         }.bind(this),
@@ -41,12 +41,12 @@ class Genes extends Component {
   getGenes(){
     $.ajax({
       method: "GET",
-      url: 'http://localhost:10675/api/genes',
+      url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
       dataType:'json',
-      cache: true,
+      //cache: true,
       success: function(data){
         this.setState({allGenes: data});
-        if (this.state.home == "true"){
+        if (this.state.home === "true"){
           this.setState({geneData:this.state.allGenes});
         }
       }.bind(this),
@@ -58,7 +58,7 @@ class Genes extends Component {
 
   render() {
     let geneItems;
-    if(this.state.allGenes != ""){
+    if(this.state.allGenes !== ""){
       geneItems = this.state.allGenes.map(
         gene => ({value: gene.gene, label: gene.gene})
           //<GeneItem key={gene.gene} gene={gene} />

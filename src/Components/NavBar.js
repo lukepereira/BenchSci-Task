@@ -32,10 +32,6 @@ const SeparatorTitle = (props) => {
 
 class NavBar extends Component {
 
-  constructor(props) {
-      super(props);
-  }
-
   render() {
     return (
       < div style={{marginTop: 65+550/2}}>

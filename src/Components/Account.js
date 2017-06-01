@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import Login from './Login';
 import Bookmarks from './Bookmarks';
 
@@ -20,10 +19,11 @@ class Account extends Component {
   }
 
   render() {
+    let el = null;
     if (this.state.authenticated){
-      var el = <Bookmarks state={this.state} stateHandler={this.stateHandler}/>
+      el = <Bookmarks state={this.state} stateHandler={this.stateHandler}/>
     } else {
-      var el = <Login state={this.state} stateHandler={this.stateHandler}/>
+      el = <Login state={this.state} stateHandler={this.stateHandler}/>
     }
     return <div className="Account"> {el} </div>
 

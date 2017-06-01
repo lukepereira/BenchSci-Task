@@ -5,7 +5,7 @@ class Bookmarks extends Component {
 
   componentDidMount () {
     window.map = this;
-    if (this.props.state.authenticated == false) {
+    if (this.props.state.authenticated === false) {
       var bookmarks = this.refs.bookmarks;
       $(bookmarks).append("<p>Please login to view your bookmarks.</p>")
     } else {
@@ -16,7 +16,7 @@ class Bookmarks extends Component {
   getBookmarks() {
     $.ajax({
       method: "GET",
-      url: 'http://localhost:10675/api/users/' +
+      url: 'http://cslinux.utm.utoronto.ca:10675/api/users/' +
           this.props.state.username + "/publications",
       dataType:'json',
       success: function(data){
@@ -34,7 +34,7 @@ class Bookmarks extends Component {
   handleSave(pub_id){
     $.ajax({
       method: "POST",
-      url: 'http://localhost:10675/api/users/' +
+      url: 'http://cslinux.utm.utoronto.ca:10675/api/users/' +
           this.props.state.username + "/publications",
       data: {'pub_id': pub_id, 'username': this.props.state.username,
           'password': this.props.state.password},
@@ -53,9 +53,10 @@ class Bookmarks extends Component {
 
   renderBookmarks(){
     var bm = this.props.state.bookmarks;
+    var el = this.refs.bookmarks;
+    console.log(bm, el);
     if (bm){
       for (var i = 0; i < bm.length; i++) {
-        var el = this.refs.bookmarks;
         if (bm.gene) $(el).append("<tr><th>Gene:  </th><td>" + bm.gene + "</td></tr>");
         if (bm.technique) $(el).append("<tr><th>Technique: </th><td>" + bm.technique + "</td></tr>");
         if (bm.title) $(el).append("<tr><th>Title: </th><td>" + bm.title + "</td></tr>");
@@ -63,16 +64,15 @@ class Bookmarks extends Component {
         if (bm.publisher) $(el).append("<tr><th> Publisher: </th><td>" + bm.publisher + "</td></tr>");
       }
     } else {
-
+      $(el).append("<h1> No bookmarks to display</h1>");
     }
   }
 
   render() {
-    console.log(this.props.state)
-    let el = <div ref="bookmarks"><h2>Bookmarks</h2><br/><hr width="550"/></div>;
+    let el = <div ><h2>Bookmarks</h2><br/><hr width="550"/>
+      <table ref="bookmarks"></table></div>;
     return (
-      <div> {el}
-      </div>
+      <div> {el} </div>
     );
   }
 }

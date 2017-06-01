@@ -1,6 +1,7 @@
 ## Demo
 
-cslinux.utm.utoronto:10675
+(unfinished)
+http://cslinux.utm.utoronto:10675
 
 ## Bench Sci Task
 

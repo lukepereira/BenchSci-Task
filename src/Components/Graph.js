@@ -62,11 +62,6 @@ class Genes extends Component {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
-    // Trying not to use JQUERY
-    console.log(d);
-    var x = document.getElementsByClassName("genePlot");
-    x.innerHTML = d.group;
-
   }
 
   function dragged(d) {

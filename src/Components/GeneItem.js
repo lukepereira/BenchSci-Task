@@ -13,6 +13,7 @@ class GeneItem extends Component {
     };
   }
 
+  // TODO: Refactor and clean
   prepareGraph(raw){
     this.initializeState();
     for (var i=0; i < raw.length; i++){
@@ -35,16 +36,16 @@ class GeneItem extends Component {
         this.state.groups[raw[i].technique_group] = [raw[i].id];
       }
     }
-
+    var rand = null;
     var nodeLength = this.state.graph.nodes.length;
     // Only executed on inital visit
-    if (this.props.home == "true"){
+    if (this.props.home === "true"){
       this.state.graph.nodes.push({
         "id": "BenchSci",
         "technique": "Welcome to BenchSci"
       });
       for (var n=0 ; n < nodeLength; n++) {
-        var rand = Math.floor(Math.random() * (nodeLength + 1));
+        rand = Math.floor(Math.random() * (nodeLength + 1));
         this.state.graph.links.push({
           "source": this.state.graph.nodes[n],
           "target": this.state.graph.nodes[rand]
@@ -65,7 +66,7 @@ class GeneItem extends Component {
         });
        // Begin making links between nodes with shared technique_group node made above
         for (var k=0; k < this.state.groups[groupName].length; k++){
-          var rand = Math.floor(Math.random() * (nodeLength + 1));
+          rand = Math.floor(Math.random() * (nodeLength + 1));
           this.state.graph.links.push({
             "source": this.state.groups[groupName][k],
             "target": groupName
@@ -86,7 +87,7 @@ class GeneItem extends Component {
       window.plot(this.state.graph);
       return (
         <div >
-          <table className="geneTable" width="550" style={{textAlign:"left"}}>
+          <table className="geneTable fixed" width="550" style={{textAlign:"left"}}>
           </table>
         </div>
       );
