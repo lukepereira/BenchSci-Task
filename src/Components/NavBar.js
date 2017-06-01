@@ -7,9 +7,9 @@ const SideNav = withRR4();
 const BaseContainer = props => <div style={{
   textAlign: 'left',
   display: 'inline-block',
-  paddingTop: 16,
-  paddingBottom: 16,
-  fontFamily: 'Roboto',
+  paddingTop: 10,
+  paddingBottom: 10,
+  fontFamily: 'Lato',
   width: 200, ...props.style
 }}>{props.children}</div>;
 
@@ -34,7 +34,7 @@ class NavBar extends Component {
 
   render() {
     return (
-      < div style={{marginTop: 65+550/2}}>
+      < div style={{marginTop: 50+550/2}}>
       <BaseContainer style={{background: '#2c3e50', color: '#FFF'}}>
       <SideNav highlightBgColor='#f60' highlightColor='white'>
           <SeparatorTitle></SeparatorTitle>

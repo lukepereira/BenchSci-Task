@@ -13,7 +13,6 @@ class GeneItem extends Component {
     };
   }
 
-  // TODO: Refactor and clean
   prepareGraph(raw){
     this.initializeState();
     for (var i=0; i < raw.length; i++){

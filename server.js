@@ -1,5 +1,4 @@
 var express = require('express');
-var router = express.Router();
 var compression = require('compression');
 var cors = require('cors');
 var morgan = require('morgan');
@@ -36,8 +35,10 @@ app.use((req, res, next) => {
   next();
 });
 
+/* Main API: see ./db/schema.sql for PSQL schema */
+
 // GET /genes => retrieves all gene types in database
-router.get('/api/genes', function(request, response) {
+app.get('/api/genes', function(request, response) {
   pool.connect(function(err, db, done) {
     if (err) {
       console.error(err);
@@ -60,10 +61,8 @@ router.get('/api/genes', function(request, response) {
   })
 });
 
-/* Main API: see ./db/schema.sql for PSQL schema */
-
 // GET /genes/:name => retrieves gene data by name
-router.get('/api/genes/:name', function(request, response) {
+app.get('/api/genes/:name', function(request, response) {
   var name = request.params.name;
 
   pool.connect(function(err, db, done) {
@@ -89,7 +88,7 @@ router.get('/api/genes/:name', function(request, response) {
 });
 
 // POST /users/add => creates new user
-router.post('/create', function(request, response) {
+app.post('/create', function(request, response) {
   var username = request.body.username;
   var password = request.body.password;
 
@@ -132,7 +131,7 @@ router.post('/create', function(request, response) {
 });
 
 // POST /users/login => authenticate user
-router.post('/login', function(request, response) {
+app.post('/login', function(request, response) {
   var username = request.body.username;
   var password = request.body.password;
 
@@ -159,7 +158,7 @@ router.post('/login', function(request, response) {
 });
 
 // GET ../{username}/publications => retrieves publications saved by user
-router.get('/api/users/:name/publications', function(request, response) {
+app.get('/api/users/:name/publications', function(request, response) {
   var username = request.params.username;
 
   pool.connect(function(err, db, done) {
@@ -187,7 +186,7 @@ router.get('/api/users/:name/publications', function(request, response) {
 });
 
 // POST .../{username}/publications => save publication for authenticated user
-router.post('/api/users/:name/publications', function(request, response) {
+app.post('/api/users/:name/publications', function(request, response) {
   var username = request.params.username;
   var password = request.body.password;
   var pub_id = request.body.pubID;
@@ -226,7 +225,7 @@ router.post('/api/users/:name/publications', function(request, response) {
 });
 
 // DELETE /{username}/publications => remove publication for authenticated user
-router.delete('/api/users/:name/publications', function(request, response) {
+app.delete('/api/users/:name/publications', function(request, response) {
   var username = request.params.username;
   var password = request.body.password;
   var pub_id = request.body.pubID;

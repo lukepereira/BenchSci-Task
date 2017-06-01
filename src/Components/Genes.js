@@ -61,7 +61,6 @@ class Genes extends Component {
     if(this.state.allGenes !== ""){
       geneItems = this.state.allGenes.map(
         gene => ({value: gene.gene, label: gene.gene})
-          //<GeneItem key={gene.gene} gene={gene} />
       );
     }
 
