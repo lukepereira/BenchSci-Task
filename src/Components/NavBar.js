@@ -9,7 +9,8 @@ const BaseContainer = props => <div style={{
   display: 'inline-block',
   paddingTop: 10,
   paddingBottom: 10,
-  fontFamily: 'Lato',
+  fontFamily: 'Ubuntu',
+  fontSize: 20,
   width: 200, ...props.style
 }}>{props.children}</div>;
 
@@ -36,11 +37,10 @@ class NavBar extends Component {
     return (
       < div style={{marginTop: 50+550/2}}>
       <BaseContainer style={{background: '#7FFF00', color: '#FFF'}}>
-      <SideNav highlightBgColor='#fff' highlightColor='green'>
+      <SideNav highlightBgColor='#fff' highlightColor='black'>
           <SeparatorTitle></SeparatorTitle>
           <Nav id='park'>
           <NavText>park</NavText>
-              <NavText>park</NavText>
           </Nav>
           <Nav id='account'>
               <NavText>account</NavText>

@@ -23,6 +23,9 @@ class Genes extends Component {
     this.getGenes();
   }
 
+getInitialState(){
+  return this.state;
+}
 	updateValue (newValue) {
     this.setState({home:"false"});
     if (newValue && newValue.value != null) {
@@ -49,7 +52,12 @@ class Genes extends Component {
       success: function(data){
         this.setState({allGenes: data});
         if (this.state.home === "true"){
+          //this.updateValue({"value":"PARK7"})
           this.setState({geneData:this.state.allGenes});
+        }
+        if (this.state.home =="park"){
+          this.updateValue({"value":"PARK7"});
+          this.setState({selectValue: "PARK7"});
         }
       }.bind(this),
       error: function(xhr, status, err){
@@ -79,7 +87,10 @@ class Genes extends Component {
         <hr />
         <svg id="svg-canvas" width="1000" height="550">></svg>
         <hr />
-        <GeneItem geneData={this.state.geneData} home={this.state.home}/>
+        <center>
+          <GeneItem geneData={this.state.geneData} home={this.state.home}/>
+        </center>
+
       </div>
     );
   }

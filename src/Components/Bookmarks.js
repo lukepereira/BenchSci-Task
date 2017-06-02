@@ -74,7 +74,7 @@ class Bookmarks extends Component {
 
   render() {
     let el = <div ><h2>Bookmarks</h2><br/><hr/>
-      <table width="550" ref="bookmarks"></table></div>;
+      <center><table width="550" ref="bookmarks"></table></center></div>;
     return (
       <div> {el} </div>
     );
