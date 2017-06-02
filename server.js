@@ -9,7 +9,7 @@ const PORT = 10675;
 let pool = new pg.Pool({
   database: 'perei345_309',
   user: 'perei345',
-  password: '36864',
+  password: '',
   host: 'mcsdb.utm.utoronto.ca',
   port: 5432,
   ssl: false,
