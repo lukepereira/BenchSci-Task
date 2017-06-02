@@ -1,7 +1,10 @@
 body {
     font-family: "Lato", sans-serif;
 }
-
+table {
+    border:1;
+    border-collapse: collapse;
+}
 .links line {
   stroke: #999;
   stroke-opacity: 0.6;
