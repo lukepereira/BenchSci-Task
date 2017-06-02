@@ -12,3 +12,8 @@ Includes search of publications by gene. <br />
 d3.js graph of data distributions based on gene and technique group. <br />
 
 Users can store a list of favorite publications <br />
+
+## To do/fix
+- Test database and server, hash and salt passwords.
+- Include alternative 'list publications' option.
+- Add bootstrap, styles and make mobile friendly.

@@ -10,6 +10,7 @@ class Bookmarks extends Component {
       $(bookmarks).append("<p>Please login to view your bookmarks.</p>")
     } else {
       this.getBookmarks();
+      this.renderBookmarks();
     }
   }
 
@@ -22,7 +23,6 @@ class Bookmarks extends Component {
       success: function(data){
         if (data){
             this.props.stateHandler({"bookmarks": data});
-            this.renderBookmarks();
         }
       }.bind(this),
       error: function(xhr, status, err){
@@ -32,30 +32,31 @@ class Bookmarks extends Component {
   }
 
   handleSave(pub_id){
-    $.ajax({
-      method: "POST",
-      url: 'http://cslinux.utm.utoronto.ca:10675/api/users/' +
-          this.props.state.username + "/publications",
-      data: {'pub_id': pub_id, 'username': this.props.state.username,
-          'password': this.props.state.password},
-      dataType:'json',
-      success: function(data){
-        if (data){
-            this.props.stateHandler(this.props.state.username, data);
-            this.renderBookmarks();
+    if (pub_id){
+      $.ajax({
+        method: "POST",
+        url: 'http://cslinux.utm.utoronto.ca:10675/api/users/' +
+            this.props.state.username + "/publications",
+        data: {'pub_id': pub_id, 'username': this.props.state.username,
+            'password': this.props.state.password},
+        dataType:'json',
+        success: function(data){
+          alert("Successful save");
+        }.bind(this),
+        error: function(xhr, status, err){
+          console.log(err);
         }
-      }.bind(this),
-      error: function(xhr, status, err){
-        console.log(err);
-      }
-    });
+      });
+    } else {
+      alert("Save failed");
+    }
   }
 
   renderBookmarks(){
     var bm = this.props.state.bookmarks;
     var el = this.refs.bookmarks;
-    console.log(bm, el);
-    if (bm){
+    if (bm && bm.length > 0){
+      $(el).html("");
       for (var i = 0; i < bm.length; i++) {
         if (bm.gene) $(el).append("<tr><th>Gene:  </th><td>" + bm.gene + "</td></tr>");
         if (bm.technique) $(el).append("<tr><th>Technique: </th><td>" + bm.technique + "</td></tr>");
@@ -64,7 +65,7 @@ class Bookmarks extends Component {
         if (bm.publisher) $(el).append("<tr><th> Publisher: </th><td>" + bm.publisher + "</td></tr>");
       }
     } else {
-      $(el).append("<h1> No bookmarks to display</h1>");
+      $(el).append("<h3> No bookmarks to display</h3>");
     }
   }
 
