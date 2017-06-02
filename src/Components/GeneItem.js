@@ -15,7 +15,9 @@ class GeneItem extends Component {
 
   prepareGraph(raw){
     this.initializeState();
-    for (var i=0; i < raw.length; i++){
+    var length = raw.length;
+    if (this.props.home=="true") length = length/2;
+    for (var i=0; i < length; i++){
       // Insert gene object into graph.nodes array
       this.state.graph.nodes[i] = {
         "id": raw[i].id,
