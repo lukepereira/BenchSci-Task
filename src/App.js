@@ -6,13 +6,27 @@ import NavBar from './Components/NavBar';
 import Account from './Components/Account';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      authenticated:"",
+      username: "",
+      password: "",
+      bookmarks:[]
+    }
+    this.stateHandler = this.stateHandler.bind(this)
+  }
 
   renderGenes = () => {
       return <Genes />;
   }
 
   renderAccount = () => {
-      return <Account state={this.state}/>;
+      return <Account state={this.state} stateHandler={this.stateHandler}/>;
+  }
+
+  stateHandler(childState) {
+    this.setState(childState);
   }
 
   render() {
@@ -22,8 +36,8 @@ class App extends Component {
           <NavBar />
           <div style={{padding: 20}} >
             <Route exact path="/" render={this.renderGenes}/>
-            <Route path="/library" render={this.renderGenes}/>
-            <Route path="/account" render={this.renderAccount}/>
+            <Route path="/library" key="1" render={this.renderGenes}/>
+            <Route path="/account" key="2" render={this.renderAccount}/>
           </div>
         </div>
       </Router>

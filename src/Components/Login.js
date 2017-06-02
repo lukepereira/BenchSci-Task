@@ -18,7 +18,6 @@ class Login extends Component {
               "password": $("#loginPassword").val(),
               "bookmarks": []
             });
-            //this.props.history.push('/some/path');
         }
       }.bind(this),
       error: function(xhr, status, err){
@@ -52,7 +51,7 @@ class Login extends Component {
     return (
       /* simple login page from https://news.ycombinator.com/login?goto=news */
       // TODO: Make forms into classes
-      <div style={{ marginTop:250, marginLeft:550/2 -200}}>
+      <div style={{ marginTop:225, marginLeft:550/2 -200}}>
       <hr />
         <b>Login</b><br/><br/>
         <form id="loginForm" onSubmit={this.handleLogin.bind(this)}>
@@ -95,7 +94,6 @@ class Login extends Component {
           </form>
           <hr />
         </div>
-
     );
   }
 }

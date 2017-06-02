@@ -87,7 +87,7 @@ app.get('/api/genes/:name', function(request, response) {
   })
 });
 
-// POST /users/add => creates new user
+// POST /create => creates new user
 app.post('/create', function(request, response) {
   var username = request.body.username;
   var password = request.body.password;
@@ -101,36 +101,38 @@ app.post('/create', function(request, response) {
       });
     } else {
       // Check if user already exists
-      db.query('SELECT * FROM benchsci.users WHERE username = $1', [username],
+      db.query('SELECT exists(SELECT 1 FROM benchsci.users WHERE username = $1)', [String(username)],
       function(err, table) {
         done();
-        // no error -> user was retrieved
-        if (!err) {
+        if (err) {
           return response.status(400).send({
-            error: err
+            error: err,
+            message: "Username already exists"
           })
         } else {
-          db.query('INSERT INTO benchsci.users ( username, password ) VALUES ($1,$2);',
-          [username, password], (err, table) => {
-            if (err) {
-              console.error('error running query', err);
-              return response.status(400).send({
-                error: err
-              });
-            } else {
-              console.log('Data Inserted');
-              response.status(201).send({
-                message: 'User Created'
-              })
-            }
-          })
+          if (assert.equal("true", row.email)){
+            db.query('INSERT INTO benchsci.users ( username, password ) VALUES ($1,$2);',
+            [username, password], (err, table) => {
+              if (err) {
+                console.error('error running query', err);
+                return response.status(400).send({
+                  error: err
+                });
+              } else {
+                console.log('Data Inserted');
+                response.status(201).send({
+                  message: 'User sucessfully created'
+                })
+              }
+            })
+          } else {}
         }
       })
     }
   });
 });
 
-// POST /users/login => authenticate user
+// POST /login => authenticate user
 app.post('/login', function(request, response) {
   var username = request.body.username;
   var password = request.body.password;
@@ -148,6 +150,7 @@ app.post('/login', function(request, response) {
         if (err) {
           return response.status(400).send({
             error: err
+            message: "incorrect username or password"
           })
         } else {
           return response.status(200).send(table.rows)
