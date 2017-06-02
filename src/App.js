@@ -28,16 +28,15 @@ class App extends Component {
   stateHandler(childState) {
     this.setState(childState);
   }
-
   render() {
     return (
       <Router>
         <div style={{display: 'flex', flexDirection: 'row'}}>
           <NavBar />
           <div style={{padding: 20}} >
-            <Route exact path="/" render={this.renderGenes}/>
-            <Route path="/library" key="1" render={this.renderGenes}/>
-            <Route path="/account" key="2" render={this.renderAccount}/>
+            <Route exact path="/" render={this.renderGenes} />
+            <Route path="/park" render={this.renderGenes}/>
+            <Route path="/account" render={this.renderAccount}/>
           </div>
         </div>
       </Router>

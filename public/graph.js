@@ -4,7 +4,7 @@ function plot (graph) {
      height = +svg.attr("height");
 
   svg.selectAll("*").remove();
-  color = d3.scaleOrdinal(d3.schemeCategory10);
+  color = d3.scaleOrdinal(d3.schemeCategory10 );
 
   simulation = d3.forceSimulation()
      .force("link", d3.forceLink().id(function(d) { return d.id; }))

@@ -42,7 +42,7 @@ class Bookmarks extends Component {
         dataType:'json',
         success: function(data){
           alert("Successful save");
-        }.bind(this),
+        },
         error: function(xhr, status, err){
           console.log(err);
         }
@@ -74,7 +74,7 @@ class Bookmarks extends Component {
 
   render() {
     let el = <div ><h2>Bookmarks</h2><br/><hr/>
-      <table border='1' border-collapse="collapse" ref="bookmarks"></table></div>;
+      <table width="550" ref="bookmarks"></table></div>;
     return (
       <div> {el} </div>
     );

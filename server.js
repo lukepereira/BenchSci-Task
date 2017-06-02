@@ -63,7 +63,7 @@ app.get('/api/genes', function(request, response) {
 });
 
 // GET /genes/:name => retrieves gene data by name
-app.get('/api/genes/:name', function(request, response) {
+app.get('/:name', function(request, response) {
   var name = request.params.name;
 
   pool.connect(function(err, db, done) {
@@ -159,7 +159,7 @@ app.post('/login', function(request, response) {
           if (table.rows.length ) {
             return response.status(200).send(table.rows);
           } else {
-           return response.status(400).send({error: err}); 
+           return response.status(400).send({error: err});
           }
         }
       })
@@ -202,7 +202,7 @@ app.get('/api/users/:name/publications', function(request, response) {
                 return response.status(200).send(table.rows)
               }
             });
-          } else { 
+          } else {
             return response.status(200).send({message: "no bookmarks"});
           }
         }

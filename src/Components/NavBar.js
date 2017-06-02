@@ -17,8 +17,8 @@ const BaseContainer = props => <div style={{
 const SeparatorTitleContainer = styled.div`
     font-size: 14px;
     color: #AAA;
-    margin: 10px 12px;
-    padding: 4px 12px 2px;
+    margin: 10px 10px;
+    padding: 5px 10px 5px;
 `;
 
 const SeparatorTitle = (props) => {
@@ -35,14 +35,15 @@ class NavBar extends Component {
   render() {
     return (
       < div style={{marginTop: 50+550/2}}>
-      <BaseContainer style={{background: '#2c3e50', color: '#FFF'}}>
-      <SideNav highlightBgColor='#f60' highlightColor='white'>
+      <BaseContainer style={{background: '#7FFF00', color: '#FFF'}}>
+      <SideNav highlightBgColor='#fff' highlightColor='green'>
           <SeparatorTitle></SeparatorTitle>
-          <Nav id='library'>
-              <NavText>Gene Library</NavText>
+          <Nav id='park'>
+          <NavText>park</NavText><br /><br /><br /><br /><br />
+              <NavText>park</NavText><br /><br /><br /><br /><br />
           </Nav>
           <Nav id='account'>
-              <NavText>Account</NavText>
+              <NavText>account</NavText><br /><br /><br /><br /><br />
           </Nav>
           <SeparatorTitle></SeparatorTitle>
       </SideNav>

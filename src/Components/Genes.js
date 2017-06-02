@@ -26,7 +26,7 @@ class Genes extends Component {
     if (newValue && newValue.value != null) {
       $.ajax({
         method: "GET",
-        url: 'http://cslinux.utm.utoronto.ca:10675/api/genes/' + newValue.value,
+        url: 'http://cslinux.utm.utoronto.ca:10675/genes/' + newValue.value,
         dataType:'json',
         //cache: true,
         success: function(data){
@@ -66,7 +66,7 @@ class Genes extends Component {
 
     return (
       <div className="Genes">
-        <h2>Gene Library</h2>
+        <h2>Gene Park</h2>
         <Select
           ref="geneSelect"
           name="form-field-name"
@@ -75,7 +75,7 @@ class Genes extends Component {
           value={this.state.selectValue}
         />
         <hr />
-        <svg id="svg-canvas" width="550" height="550">></svg>
+        <svg id="svg-canvas" width="1000" height="550">></svg>
         <hr />
         <GeneItem geneData={this.state.geneData} home={this.state.home}/>
       </div>

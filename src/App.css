@@ -1,5 +1,8 @@
 body {
+    margin: 0;
+    padding: 0;
     font-family: "Lato", sans-serif;
+
 }
 table {
     border:1;
@@ -10,7 +13,22 @@ table {
   stroke-opacity: 0.6;
 }
 
+h1 {
+      color: #f60;
+}
 .nodes circle {
-  stroke: pink;
+  stroke: #77F;
   stroke-width: 1px;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+.Select-clear {
+  color:#f60;
 }
