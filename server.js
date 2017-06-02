@@ -36,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 /* Main API: see ./db/schema.sql for PSQL schema */
+/* Really need to clean up this code */
 
 // GET /genes => retrieves all gene types in database
 app.get('/api/genes', function(request, response) {
@@ -95,24 +96,23 @@ app.post('/create', function(request, response) {
   pool.connect((err, db, done) => {
     done();
     if (err) {
-      console.error('error open connection', err);
-      return response.status(400).send({
+      return response.status(500).send({
         error: err
       });
     } else {
       // Check if user already exists
-      db.query('SELECT exists(SELECT 1 FROM benchsci.users WHERE username = $1)', [String(username)],
+      db.query('SELECT * FROM benchsci.users WHERE username = $1;', [String(username)],
       function(err, table) {
         done();
         if (err) {
           return response.status(400).send({
             error: err,
-            message: "Username already exists"
           })
         } else {
-          if (assert.equal("true", row.email)){
+          // no user retrieved
+          if (!table.rows.length){
             db.query('INSERT INTO benchsci.users ( username, password ) VALUES ($1,$2);',
-            [username, password], (err, table) => {
+            [String(username), String(password)], (err, table) => {
               if (err) {
                 console.error('error running query', err);
                 return response.status(400).send({
@@ -125,7 +125,12 @@ app.post('/create', function(request, response) {
                 })
               }
             })
-          } else {}
+          } else {
+            response.status(400).send({
+              message: 'User already exists'
+            })
+          }
+
         }
       })
     }
@@ -136,7 +141,6 @@ app.post('/create', function(request, response) {
 app.post('/login', function(request, response) {
   var username = request.body.username;
   var password = request.body.password;
-
   pool.connect(function(err, db, done) {
     if (err) {
       console.error(err);
@@ -145,15 +149,18 @@ app.post('/login', function(request, response) {
       });
     } else {
       db.query('SELECT * FROM benchsci.users WHERE username = $1 and password = $2',
-      [username, password], function(err, table) {
+      [String(username), String(password)], function(err, table) {
         done();
         if (err) {
           return response.status(400).send({
             error: err
-            message: "incorrect username or password"
           })
         } else {
-          return response.status(200).send(table.rows)
+          if (table.rows.length ) {
+            return response.status(200).send(table.rows);
+          } else {
+           return response.status(400).send({error: err}); 
+          }
         }
       })
     }
@@ -162,7 +169,7 @@ app.post('/login', function(request, response) {
 
 // GET ../{username}/publications => retrieves publications saved by user
 app.get('/api/users/:name/publications', function(request, response) {
-  var username = request.params.username;
+  var username = request.params.name;
 
   pool.connect(function(err, db, done) {
     if (err) {
@@ -171,29 +178,44 @@ app.get('/api/users/:name/publications', function(request, response) {
         'error': err
       });
     } else {
-      db.query('SELECT * FROM benchsci.userpubs join benchsci.genes on'
-      + 'benchsci.userpubs.pub_id = benchsci.genes.pub_id WHERE username = $1',
-        [String(username)],
-        function(err, table) {
-          done();
-          if (err) {
-            return response.status(400).send({
-              error: err
-            })
-          } else {
-            return response.status(200).send(table.rows)
+      // Check if user has no entries in publication table
+      db.query('SELECT * FROM benchsci.userpubs WHERE username = $1;', [String(username)],
+      function(err, table) {
+        done();
+        if (err) {
+          return response.status(400).send({
+            error: err,
+          })
+        } else {
+          // user has bookmarks saved -> get publication information
+          if (table.rows.length > 0 ){
+            db.query('SELECT * FROM benchsci.userpubs join benchsci.genes on'
+            + ' benchsci.userpubs.pub_id = benchsci.genes.id WHERE username = $1',
+            [String(username)],
+            function(err, table) {
+              done();
+              if (err) {
+                return response.status(400).send({
+                  error: err
+                })
+              } else {
+                return response.status(200).send(table.rows)
+              }
+            });
+          } else { 
+            return response.status(200).send({message: "no bookmarks"});
           }
-        })
+        }
+      })
     }
   })
 });
 
 // POST .../{username}/publications => save publication for authenticated user
 app.post('/api/users/:name/publications', function(request, response) {
-  var username = request.params.username;
+  var username = request.params.name;
   var password = request.body.password;
-  var pub_id = request.body.pubID;
-
+  var pub_id = request.body.pub_id;
   pool.connect(function(err, db, done) {
     if (err) {
       console.error(err);
@@ -202,25 +224,31 @@ app.post('/api/users/:name/publications', function(request, response) {
       });
     } else {
       // Check if valid user
-      db.query('SELECT * FROM benchsci.users WHERE username = $1 and password=$2',
-      [username, password], function(err, table) {
+      db.query('SELECT * FROM benchsci.users WHERE username = $1 and password=$2;',
+      [String(username),String(password)], function(err, table) {
         done();
         if (err) {
           return response.status(400).send({
             error: err
           })
         } else {
-          db.query('INSERT INTO benchsci.userpubs(username, pub_id) values ($1, $2)',
-          [username, pub_id], function(err, table) {
-            done();
-            if (err) {
-              return response.status(400).send({
-                error: err
-              })
-            } else {
-              return response.status(200).send(table.rows)
-            }
-          });
+	console.log(table.rows.length);
+	console.log(pub_id, username);
+          if (table.rows.length > 0) {
+            db.query('INSERT INTO benchsci.userpubs(pub_id, username) values ($1, $2);',
+            [pub_id, String(username)], function(err, table) {
+              done();
+              if (err) {
+                return response.status(400).send({
+                  error: err
+                });
+              } else {
+                return response.status(200).send({message:"success"});
+              }
+            });
+          } else {
+             return response.status(400).send({message:"invalid user" });
+          }
         }
       });
     }
@@ -253,7 +281,7 @@ app.delete('/api/users/:name/publications', function(request, response) {
               return response.status(400).send(err)
             } else {
               return response.status(200).send({
-                message: 'Success: deleted record'
+               'message': 'Success: deleted record'
               })
             }
           })
