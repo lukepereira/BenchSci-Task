@@ -62,8 +62,8 @@ app.get('/api/genes', function(request, response) {
   })
 });
 
-// GET /genes/:name => retrieves gene data by name
-app.get('/:name', function(request, response) {
+// GET /:name => retrieves gene data by name
+app.get('/api/genes/:name', function(request, response) {
   var name = request.params.name;
 
   pool.connect(function(err, db, done) {

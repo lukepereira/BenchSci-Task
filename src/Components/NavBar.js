@@ -39,11 +39,11 @@ class NavBar extends Component {
       <SideNav highlightBgColor='#fff' highlightColor='green'>
           <SeparatorTitle></SeparatorTitle>
           <Nav id='park'>
-          <NavText>park</NavText><br /><br /><br /><br /><br />
-              <NavText>park</NavText><br /><br /><br /><br /><br />
+          <NavText>park</NavText>
+              <NavText>park</NavText>
           </Nav>
           <Nav id='account'>
-              <NavText>account</NavText><br /><br /><br /><br /><br />
+              <NavText>account</NavText>
           </Nav>
           <SeparatorTitle></SeparatorTitle>
       </SideNav>

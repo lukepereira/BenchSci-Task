@@ -4,6 +4,7 @@ import './App.css';
 import Genes from './Components/Genes';
 import NavBar from './Components/NavBar';
 import Account from './Components/Account';
+import $ from 'jquery';
 
 class App extends Component {
   constructor() {

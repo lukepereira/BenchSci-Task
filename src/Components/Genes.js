@@ -4,6 +4,8 @@ import 'react-select/dist/react-select.css';
 import $ from 'jquery';
 import GeneItem from './GeneItem';
 
+const PORT = 10675;
+
 class Genes extends Component {
 
   constructor(){
@@ -26,7 +28,7 @@ class Genes extends Component {
     if (newValue && newValue.value != null) {
       $.ajax({
         method: "GET",
-        url: 'http://cslinux.utm.utoronto.ca:10675/genes/' + newValue.value,
+        url: 'http://cslinux.utm.utoronto.ca:'+PORT+'/api/genes/'+newValue.value,
         dataType:'json',
         //cache: true,
         success: function(data){
@@ -41,7 +43,7 @@ class Genes extends Component {
   getGenes(){
     $.ajax({
       method: "GET",
-      url: 'http://cslinux.utm.utoronto.ca:10675/api/genes',
+      url: 'http://cslinux.utm.utoronto.ca:'+PORT+'/api/genes',
       dataType:'json',
       //cache: true,
       success: function(data){

@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 class GeneItem extends Component {
   constructor(){
     super();
-    this.initializeState();
+    //this.initializeState();
+    this.state = {
+      raw : [],
+      graph : {"nodes":[], "links":[]},
+      groups : {}
+    };
   }
   initializeState() {
     this.state = {
